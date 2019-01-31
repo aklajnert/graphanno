@@ -16,7 +16,7 @@ class Basic:
 class BasicSchema:
     __model__ = Basic
     
-# is equivalent to this:
+# ...is equivalent to this:
 class BasicSchema(graphene.ObjectType):
     number = graphene.Int()
     string = graphene.String()
