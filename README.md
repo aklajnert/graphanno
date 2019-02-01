@@ -1,6 +1,6 @@
 # graphanno
 
-Work in progress. The goal is to leverage Python 3.6+ type annotations to generate
+Work in progress. The goal is to leverage Python 3.5+ type annotations to generate
 the graphene `ObjectType` classes.
 
 Example usage:
