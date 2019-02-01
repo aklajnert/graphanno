@@ -4,12 +4,9 @@ python:
   - "3.7"
 dist: xenial
 sudo: true
-jobs:
-  include:
-    - name: pytest
-      script: pytest
-    - name: pylint
-      script: pylint src
+script:
+  - pytest
+  - pylint src
 install:
   - pip install -r requirements.txt
   - pip install pytest pylint
