@@ -13,4 +13,5 @@ class AdvancedSchema:
 
 def test_advanced():
     """Test advanced class behavior."""
+    assert isinstance(AdvancedSchema.array, graphene.List)
     assert issubclass(AdvancedSchema, graphene.ObjectType)

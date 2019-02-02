@@ -1,5 +1,4 @@
 """Main module."""
-import typing
 from datetime import date, datetime, time
 
 import graphene
@@ -15,8 +14,8 @@ BASIC_TYPE_MAPPINGS = {
 }
 
 ADVANCED_TYPE_MAPPINGS = {
-    typing.Union: graphene.Union,
-    typing.List: graphene.List
+    None: graphene.Union,
+    'List': graphene.List
 }
 
 
@@ -29,19 +28,20 @@ def graph_annotations(cls):
     annotations.update(getattr(cls, '__annotations__', {}))
 
     for name, annotation in annotations.items():
-        attributes[name] = _get_type_from_annotation(annotation)
-
+        func, args = _get_type_from_annotation(annotation)
+        attributes[name] = func(*args)
     return type(cls.__name__, (graphene.ObjectType,), attributes)
 
 
 def _get_type_from_annotation(annotation):
     basic_type = BASIC_TYPE_MAPPINGS.get(annotation)
     if basic_type:
-        return basic_type()
+        return basic_type, tuple()
 
-    advanced_type = ADVANCED_TYPE_MAPPINGS.get(annotation)
+    advanced_type = ADVANCED_TYPE_MAPPINGS.get(annotation._name)
     if advanced_type:
-        return advanced_type(
-            _get_type_from_annotation(sub_annotation) for sub_annotation in annotation.__args__)
+        sub_annotations = tuple(
+            _get_type_from_annotation(sub_annotation)[0] for sub_annotation in annotation.__args__)
+        return advanced_type, sub_annotations
 
     return None
