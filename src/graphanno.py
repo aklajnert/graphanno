@@ -19,8 +19,9 @@ ADVANCED_TYPE_MAPPINGS = {
     typing.List: graphene.List
 }
 
+
 def graph_annotations(cls):
-    """Prepare GrqphQL schema based on the type annotations."""
+    """Prepare GraphQL schema based on the type annotations."""
     attributes = {}
     target_class = cls.__model__
 
@@ -28,8 +29,19 @@ def graph_annotations(cls):
     annotations.update(getattr(cls, '__annotations__', {}))
 
     for name, annotation in annotations.items():
-        basic_type = BASIC_TYPE_MAPPINGS.get(annotation)
-        if basic_type:
-            attributes[name] = basic_type()
-            continue
+        attributes[name] = _get_type_from_annotation(annotation)
+
     return type(cls.__name__, (graphene.ObjectType,), attributes)
+
+
+def _get_type_from_annotation(annotation):
+    basic_type = BASIC_TYPE_MAPPINGS.get(annotation)
+    if basic_type:
+        return basic_type()
+
+    advanced_type = ADVANCED_TYPE_MAPPINGS.get(annotation)
+    if advanced_type:
+        return advanced_type(
+            _get_type_from_annotation(sub_annotation) for sub_annotation in annotation.__args__)
+
+    return None
