@@ -13,5 +13,6 @@ class AdvancedSchema:
 
 def test_advanced():
     """Test advanced class behavior."""
+    # pylint: disable=no-member
     assert isinstance(AdvancedSchema.array, graphene.List)
     assert issubclass(AdvancedSchema, graphene.ObjectType)

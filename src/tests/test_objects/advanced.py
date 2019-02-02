@@ -1,5 +1,5 @@
 """Advanced class definition."""
-from typing import List, Union
+from typing import List
 
 
 class Advanced:
