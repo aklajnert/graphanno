@@ -1,8 +1,8 @@
 """Test basic example."""
 import graphene
 
-from src.graphanno import graph_annotations
 from .test_objects.basic import Basic
+from ..graphanno import graph_annotations
 
 
 @graph_annotations
