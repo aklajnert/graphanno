@@ -14,7 +14,6 @@ BASIC_TYPE_MAPPINGS = {
 }
 
 ADVANCED_TYPE_MAPPINGS = {
-    None: graphene.Union,
     'List': graphene.List
 }
 
@@ -28,20 +27,21 @@ def graph_annotations(cls):
     annotations.update(getattr(cls, '__annotations__', {}))
 
     for name, annotation in annotations.items():
-        func, args = _get_type_from_annotation(annotation)
-        attributes[name] = func(*args)
+        attributes[name] = _get_type_from_annotation(annotation)
+
     return type(cls.__name__, (graphene.ObjectType,), attributes)
 
 
 def _get_type_from_annotation(annotation):
     basic_type = BASIC_TYPE_MAPPINGS.get(annotation)
     if basic_type:
-        return basic_type, tuple()
+        return basic_type()
 
-    advanced_type = ADVANCED_TYPE_MAPPINGS.get(annotation._name)
-    if advanced_type:
-        sub_annotations = tuple(
-            _get_type_from_annotation(sub_annotation)[0] for sub_annotation in annotation.__args__)
-        return advanced_type, sub_annotations
+    if annotation._name == 'List':
+        return graphene.List(_get_subannotations(annotation))
 
     return None
+
+
+def _get_subannotations(annotation):
+    return tuple(_get_type_from_annotation(sub_annotation) for sub_annotation in annotation.__args__)
