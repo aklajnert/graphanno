@@ -13,10 +13,6 @@ BASIC_TYPE_MAPPINGS = {
     time: graphene.Time,
 }
 
-ADVANCED_TYPE_MAPPINGS = {
-    'List': graphene.List
-}
-
 UNSUPORTED_TYPES = (list, dict)
 
 
@@ -48,7 +44,7 @@ def _get_type_from_annotation(annotation):
     if basic_type:
         return basic_type()
 
-    if annotation._name == 'List': # pylint: disable=protected-access
+    if str(annotation).startswith('typing.List'):
         return graphene.List(_get_sub_annotations(annotation))
 
     return None
