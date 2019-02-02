@@ -1,4 +1,6 @@
 """Test basic example."""
+from collections import OrderedDict
+
 import graphene
 
 from .test_objects.basic import Basic
@@ -20,6 +22,22 @@ class ExtendedBasicSchema:
     boolean: int  # override declaration from basic
 
 
+class Query(graphene.ObjectType):
+    """Test GraphQL query."""
+    basic = graphene.Field(lambda: ExtendedBasicSchema)
+
+    @staticmethod
+    def resolve_basic(*_):
+        """Return the basic object instance"""
+        # pylint: disable=attribute-defined-outside-init
+        data = ExtendedBasicSchema()
+        data.extra = False
+        data.boolean = 5
+        data.number = 10
+        data.string = 'some string'
+        return data
+
+
 def test_basic():
     """Test basic case."""
     # pylint: disable=no-member
@@ -37,3 +55,15 @@ def test_extended_basic():
     assert isinstance(ExtendedBasicSchema.boolean, graphene.Int)
     assert isinstance(ExtendedBasicSchema.extra, graphene.Boolean)
     assert issubclass(ExtendedBasicSchema, graphene.ObjectType)
+
+
+def test_query():
+    """Test graphene query with the generated object."""
+    schema = graphene.Schema(query=Query)
+    response = schema.execute('{basic {extra, boolean, number, string} }')
+    assert response.data == OrderedDict([
+        ('basic', OrderedDict([
+            ('extra', False),
+            ('boolean', 5),
+            ('number', 10),
+            ('string', 'some string')]))])
