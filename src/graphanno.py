@@ -34,7 +34,8 @@ def graph_annotations(cls):
             if ignore_unsupported:
                 continue
             raise UnsupportedAnnotation(f'The type annotation: {annotation} is not supported.')
-        attributes[name] = _get_type_from_annotation(annotation)
+        func, args = _get_type_from_annotation(annotation)
+        attributes[name] = func(*args)
 
     return type(cls.__name__, (graphene.ObjectType,), attributes)
 
@@ -42,13 +43,13 @@ def graph_annotations(cls):
 def _get_type_from_annotation(annotation):
     basic_type = BASIC_TYPE_MAPPINGS.get(annotation)
     if basic_type:
-        return basic_type()
+        return basic_type, tuple()
 
     if str(annotation).startswith('typing.List'):
-        return graphene.List(_get_sub_annotations(annotation))
+        return graphene.List, _get_sub_annotations(annotation)
 
     return None
 
 
 def _get_sub_annotations(annotation):
-    return tuple(_get_type_from_annotation(sub_annotation) for sub_annotation in annotation.__args__)
+    return tuple(_get_type_from_annotation(sub_annotation)[0] for sub_annotation in annotation.__args__)
