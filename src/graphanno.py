@@ -25,9 +25,13 @@ def graph_annotations(cls):
     attributes = {}
     target_class = cls.__model__
     ignore_unsupported = getattr(cls, '__ignore_unsupported__', False)
+    excluded_keys = getattr(cls, '__excluded_fields__', tuple())
 
     annotations = dict(**getattr(target_class, '__annotations__', {}))
     annotations.update(getattr(cls, '__annotations__', {}))
+
+    for key in excluded_keys:
+        annotations.pop(key)
 
     for name, annotation in annotations.items():
         if annotation in UNSUPORTED_TYPES:
