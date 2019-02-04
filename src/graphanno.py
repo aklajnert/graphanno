@@ -27,7 +27,7 @@ class NoAnnotationsError(Exception):
 def graph_annotations(cls):
     """Prepare GraphQL schema based on the type annotations."""
     attributes = {}
-    target_class = cls.__model__
+    target_class = cls.__model__ if hasattr(cls, '__model__') else cls
     ignore_unsupported = getattr(cls, '__ignore_unsupported__', False)
     excluded_keys = getattr(cls, '__excluded_fields__', tuple())
 
@@ -45,8 +45,8 @@ def graph_annotations(cls):
             if ignore_unsupported:
                 continue
             raise UnsupportedAnnotationError(f'The type annotation: {annotation} is not supported.')
-        func, args = _get_type_from_annotation(annotation)
-        attributes[name] = func(*args)
+        type_, args = _get_type_from_annotation(annotation)
+        attributes[name] = type_(*args)
 
     return type(cls.__name__, (graphene.ObjectType,), attributes)
 
@@ -59,7 +59,8 @@ def _get_type_from_annotation(annotation):
     if str(annotation).startswith('typing.List'):
         return graphene.List, _get_sub_annotations(annotation)
 
-    return None
+    type_ = graph_annotations(annotation)
+    return graphene.Field, (type_,)
 
 
 def _get_sub_annotations(annotation):
