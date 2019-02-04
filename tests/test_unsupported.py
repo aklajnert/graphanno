@@ -2,7 +2,7 @@
 import graphene
 import pytest
 
-from .. import graphanno
+from graphanno import graphanno
 
 
 class Unsupported:

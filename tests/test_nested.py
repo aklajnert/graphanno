@@ -4,7 +4,7 @@ from collections import OrderedDict
 import graphene
 
 from .test_objects.nested import TopLevel, Leaf
-from ..graphanno import graph_annotations
+from graphanno import graph_annotations
 
 
 @graph_annotations

@@ -3,8 +3,8 @@ from collections import OrderedDict
 
 import graphene
 
+from graphanno import graph_annotations
 from .test_objects.advanced import Advanced
-from ..graphanno import graph_annotations
 
 
 @graph_annotations

@@ -3,7 +3,7 @@
 import graphene
 
 from .test_objects.basic import Basic
-from ..graphanno import graph_annotations
+from graphanno import graph_annotations
 
 
 @graph_annotations

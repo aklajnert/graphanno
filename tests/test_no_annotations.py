@@ -1,7 +1,7 @@
 """Test no annotations."""
 import pytest
 
-from .. import graphanno
+from graphanno import graphanno
 
 
 class NoAnnotations:
