@@ -24,7 +24,7 @@ class ExtendedBasicSchema:
 
 class Query(graphene.ObjectType):
     """Test GraphQL query."""
-    basic = graphene.Field(lambda: ExtendedBasicSchema)
+    basic = graphene.Field(ExtendedBasicSchema)
 
     @staticmethod
     def resolve_basic(*_):

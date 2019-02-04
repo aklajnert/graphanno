@@ -15,7 +15,7 @@ class AdvancedSchema:
 
 class Query(graphene.ObjectType):
     """Test GraphQL query."""
-    advanced = graphene.Field(lambda: AdvancedSchema)
+    advanced = graphene.Field(AdvancedSchema)
 
     @staticmethod
     def resolve_advanced(*_):

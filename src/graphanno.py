@@ -19,6 +19,7 @@ UNSUPORTED_TYPES = (list, dict)
 class UnsupportedAnnotationError(Exception):
     """Raised on unsupported annotation resolve attempt."""
 
+
 class NoAnnotationsError(Exception):
     """Raised when no annotations have been found (or all are excluded)."""
 
