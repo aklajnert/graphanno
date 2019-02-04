@@ -16,8 +16,11 @@ BASIC_TYPE_MAPPINGS = {
 UNSUPORTED_TYPES = (list, dict)
 
 
-class UnsupportedAnnotation(Exception):
+class UnsupportedAnnotationError(Exception):
     """Raised on unsupported annotation resolve attempt."""
+
+class NoAnnotationsError(Exception):
+    """Raised when no annotations have been found (or all are excluded)."""
 
 
 def graph_annotations(cls):
@@ -33,11 +36,14 @@ def graph_annotations(cls):
     for key in excluded_keys:
         annotations.pop(key)
 
+    if not annotations:
+        raise NoAnnotationsError(f'No included annotations for class {cls.__name__}.')
+
     for name, annotation in annotations.items():
         if annotation in UNSUPORTED_TYPES:
             if ignore_unsupported:
                 continue
-            raise UnsupportedAnnotation(f'The type annotation: {annotation} is not supported.')
+            raise UnsupportedAnnotationError(f'The type annotation: {annotation} is not supported.')
         func, args = _get_type_from_annotation(annotation)
         attributes[name] = func(*args)
 

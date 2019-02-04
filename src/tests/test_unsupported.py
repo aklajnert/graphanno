@@ -13,7 +13,7 @@ class Unsupported:
 
 def test_exception_raised():
     """Decorating the class refering to Unsupported will raise an exception."""
-    with pytest.raises(graphanno.UnsupportedAnnotation) as excinfo:
+    with pytest.raises(graphanno.UnsupportedAnnotationError) as excinfo:
         @graphanno.graph_annotations
         class _:
             __model__ = Unsupported
