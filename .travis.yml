@@ -6,7 +6,7 @@ dist: xenial
 sudo: true
 script:
   - pytest
-  - pylint src
+  - pylint graphanno
 install:
   - pip install -r requirements.txt
   - pip install pytest pylint
