@@ -8,5 +8,4 @@ script:
   - pytest
   - pylint graphanno
 install:
-  - pip install -r requirements.txt
-  - pip install pytest pylint
+  - pip install .[test]
