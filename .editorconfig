@@ -14,9 +14,6 @@ indent_size = 4
 
 [*.py]
 max_line_length = 110
-known_first_party = docker_manager
-multi_line_output = 3
-default_section = THIRDPARTY
 
 [*.{html, css, scss, json, yml, ts}]
 indent_style = space

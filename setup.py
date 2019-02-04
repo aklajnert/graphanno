@@ -40,7 +40,7 @@ setup(
     packages=find_packages(exclude=['contrib', 'docs', 'tests']),
     python_requires='>=3.6, <4',
     install_requires=['graphene>=2.0'],
-    extras_require={'test': ['pytest', 'pylint'], },
+    extras_require={'test': ['pytest', 'pylint', 'flake8'], },
     project_urls={
         'Bug Reports': 'https://github.com/aklajnert/graphanno/issues',
         'Source': 'https://github.com/aklajnert/graphanno',
