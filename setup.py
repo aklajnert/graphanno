@@ -19,6 +19,7 @@ setup(
     url='https://github.com/aklajnert/graphanno',
     author='Andrzej Klajnert',
     author_email='py@aklajnert.pl',
+    license="MIT",
     classifiers=[
         # How mature is this project? Common values are
         #   3 - Alpha
