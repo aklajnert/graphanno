@@ -12,8 +12,8 @@ class NoAnnotations:
 
 class WithAnnotations:
     """This class have annotations, but will be excluded in test."""
-    string: str = ''
-    boolean: bool = True
+    string: str
+    boolean: bool
 
 
 def test_no_annotations_raised():

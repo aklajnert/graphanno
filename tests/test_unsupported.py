@@ -7,8 +7,8 @@ from graphanno import graphanno
 
 class Unsupported:
     """Class that uses unsupported types."""
-    array: list = []
-    string: str = 'test'
+    array: list
+    string: str
 
 
 def test_exception_raised():
