@@ -1,10 +1,10 @@
 """Test basic example."""
-from collections import OrderedDict
 
 import graphene
 
 from graphanno import graph_annotations
 from .test_objects.basic import Basic
+from .utils import to_dict
 
 
 @graph_annotations
@@ -61,9 +61,9 @@ def test_query():
     """Test graphene query with the generated object."""
     schema = graphene.Schema(query=Query)
     response = schema.execute('{basic {extra, boolean, number, string} }')
-    assert response.data == OrderedDict([
-        ('basic', OrderedDict([
-            ('extra', False),
-            ('boolean', 5),
-            ('number', 10),
-            ('string', 'some string')]))])
+    assert to_dict(response.data) == {'basic':
+                                          {'extra': False,
+                                           'boolean': 5,
+                                           'number': 10,
+                                           'string': 'some string'}
+                                      }

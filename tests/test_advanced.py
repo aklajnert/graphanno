@@ -1,10 +1,10 @@
 """Test advanced example."""
-from collections import OrderedDict
 
 import graphene
 
 from graphanno import graph_annotations
 from .test_objects.advanced import Advanced
+from .utils import to_dict
 
 
 @graph_annotations
@@ -37,5 +37,4 @@ def test_query():
     """Test real query with generated object."""
     schema = graphene.Schema(query=Query)
     response = schema.execute('{ advanced {array} }')
-    assert response.data == OrderedDict(
-        [('advanced', OrderedDict([('array', ['first', 'second', 'third'])]))])
+    assert to_dict(response.data) == {'advanced': {'array': ['first', 'second', 'third']}}
