@@ -10,7 +10,7 @@ class SubLeaf:
 class Leaf:
     """Leaf class definition."""
     value: str = ''
-    leaflet: SubLeaf = None
+    leaflets: List[SubLeaf] = None
 
 
 class TopLevel:

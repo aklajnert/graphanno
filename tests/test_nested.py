@@ -22,10 +22,12 @@ class NestedQuery(graphene.ObjectType):
         """Return the top level object instance"""
         # pylint: disable=attribute-defined-outside-init
         data = TopLevel()
-        subleaf = SubLeaf()
-        subleaf.value = 'subleaf value'
+        subleaf1 = SubLeaf()
+        subleaf1.value = 'subleaf1'
+        subleaf2 = SubLeaf()
+        subleaf2.value = 'subleaf2'
         leaf = Leaf()
-        leaf.leaflet = subleaf
+        leaf.leaflets = [subleaf1, subleaf2]
         leaf.value = 'some leaf value'
         data.leaf = leaf
         data.name = 'top level name'
@@ -40,17 +42,17 @@ def test_nested():
     assert isinstance(NestedSchema.leaf, graphene.Field)
     assert str(NestedSchema.leaf.type) == 'Leaf'
     assert isinstance(NestedSchema.leaf.type.value, graphene.String)
-    assert isinstance(NestedSchema.leaf.type.leaflet, graphene.Field)
-    assert str(NestedSchema.leaf.type.leaflet.type) == 'SubLeaf'
+    assert isinstance(NestedSchema.leaf.type.leaflets, graphene.List)
 
 
 def test_nested_query():
     """Test the nested class behavior as a query."""
     schema = graphene.Schema(query=NestedQuery)
-    response = schema.execute('{topLevel {name, leaf {value , leaflet {value} } } }')
+    response = schema.execute('{topLevel {name, leaf {value , leaflets {value} } } }')
     assert response.data == OrderedDict([('topLevel', OrderedDict([
         ('name', 'top level name'),
         ('leaf', OrderedDict([
             ('value', 'some leaf value'),
-            ('leaflet', OrderedDict([
-                ('value', 'subleaf value')]))]))]))])
+            ('leaflets', [OrderedDict([
+                ('value', 'subleaf1')]), OrderedDict([
+                ('value', 'subleaf2')])])]))]))])

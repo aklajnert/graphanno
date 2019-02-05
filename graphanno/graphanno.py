@@ -51,17 +51,13 @@ def graph_annotations(cls):
     return type(cls.__name__, (graphene.ObjectType,), attributes)
 
 
-def _get_type_from_annotation(annotation):
+def _get_type_from_annotation(annotation, type_only=False):
     basic_type = BASIC_TYPE_MAPPINGS.get(annotation)
     if basic_type:
-        return basic_type, tuple()
+        return basic_type if type_only else (basic_type, tuple())
 
     if str(annotation).startswith('typing.List'):
-        return graphene.List, _get_sub_annotations(annotation)
+        return graphene.List, (_get_type_from_annotation(annotation.__args__[0], True),)
 
     type_ = graph_annotations(annotation)
-    return graphene.Field, (type_,)
-
-
-def _get_sub_annotations(annotation):
-    return tuple(_get_type_from_annotation(sub_annotation)[0] for sub_annotation in annotation.__args__)
+    return type_ if type_only else (graphene.Field, (type_,))
