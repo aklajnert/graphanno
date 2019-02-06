@@ -1,11 +1,10 @@
 """Test example with nesting."""
-from collections import OrderedDict
 
 import graphene
 
 from graphanno import graph_annotations
-from .utils import to_dict
 from .test_objects.nested import TopLevel, Leaf, SubLeaf
+from .utils import to_dict
 
 
 @graph_annotations
@@ -50,13 +49,16 @@ def test_nested_query():
     """Test the nested class behavior as a query."""
     schema = graphene.Schema(query=NestedQuery)
     response = schema.execute('{topLevel {name, leaf {value , leaflets {value} } } }')
-    assert to_dict(response.data) == {'topLevel':
-                                          {'name': 'top level name',
-                                           'leaf':
-                                               {'value': 'some leaf value',
-                                                'leaflets': [
-                                                    {'value': 'subleaf1'},
-                                                    {'value': 'subleaf2'}]
-                                                }
-                                           }
-                                      }
+    assert to_dict(response.data) == {
+        'topLevel':
+            {
+                'name': 'top level name',
+                'leaf':
+                    {
+                        'value': 'some leaf value',
+                        'leaflets': [
+                            {'value': 'subleaf1'},
+                            {'value': 'subleaf2'}]
+                    }
+            }
+    }

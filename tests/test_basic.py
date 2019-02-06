@@ -61,9 +61,12 @@ def test_query():
     """Test graphene query with the generated object."""
     schema = graphene.Schema(query=Query)
     response = schema.execute('{basic {extra, boolean, number, string} }')
-    assert to_dict(response.data) == {'basic':
-                                          {'extra': False,
-                                           'boolean': 5,
-                                           'number': 10,
-                                           'string': 'some string'}
-                                      }
+    assert to_dict(response.data) == {
+        'basic':
+            {
+                'extra': False,
+                'boolean': 5,
+                'number': 10,
+                'string': 'some string'
+            }
+    }
