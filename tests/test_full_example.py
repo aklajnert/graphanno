@@ -1,4 +1,4 @@
-# pylint: disable=arguments-differ
+# pylint: disable=arguments-differ,multiple-statements
 """Test full example containing all features."""
 import graphene
 
