@@ -8,7 +8,7 @@ from .utils import to_dict
 
 
 @graph_annotations
-class ExampleSchema(graphene.ObjectType):
+class ExampleSchema:
     """Graphene object that bases on Example class."""
     __model__ = Example
     __excluded_fields__ = ('redundant',)
@@ -17,7 +17,7 @@ class ExampleSchema(graphene.ObjectType):
 
     @classmethod
     def __init_subclass_with_meta__(cls, *args, **kwargs):
-        return super().__init_subclass_with_meta__(
+        return super().__init_subclass_with_meta__(  # pylint: disable=no-member
             *args, default_resolver=cls._default_fields_resolver, **kwargs)
 
     @classmethod

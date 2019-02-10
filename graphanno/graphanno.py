@@ -48,7 +48,7 @@ def graph_annotations(cls):
         type_, args = _get_type_from_annotation(annotation)
         attributes[name] = type_(*args)
 
-    superclasses = (cls,) if issubclass(cls, graphene.ObjectType) else (graphene.ObjectType, cls)
+    superclasses = (cls,) if issubclass(cls, graphene.ObjectType) else (cls, graphene.ObjectType)
     return type(cls.__name__, superclasses, attributes)
 
 
