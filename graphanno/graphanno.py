@@ -13,7 +13,7 @@ BASIC_TYPE_MAPPINGS = {
     time: graphene.Time,
 }
 
-UNSUPORTED_TYPES = (list, dict)
+UNSUPORTED_TYPES = (list, dict, tuple, set)
 
 
 class UnsupportedAnnotationError(Exception):
