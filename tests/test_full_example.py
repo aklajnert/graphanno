@@ -1,4 +1,4 @@
-# pylint: disable=arguments-differ,multiple-statements
+# pylint: disable=arguments-differ
 """Test full example containing all features."""
 import graphene
 
@@ -13,13 +13,15 @@ class ExampleSchema(graphene.ObjectType):
     __model__ = Example
     __excluded_fields__ = ('redundant',)
 
+    instance = Example.create_instance()
+
     @classmethod
     def __init_subclass_with_meta__(cls, *args, **kwargs):
         super().__init_subclass_with_meta__(*args, default_resolver=cls._default_fields_resolver, **kwargs)
 
     @classmethod
     def _default_fields_resolver(cls, attr_name, *_):
-        return getattr(cls.__model__.create_instance(), attr_name)
+        return getattr(cls.instance, attr_name)
 
 
 def test_example_schema():
