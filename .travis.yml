@@ -7,7 +7,6 @@ dist: xenial
 sudo: true
 script:
   - pytest
-  - pylint --version
   - pylint graphanno
   - pylint tests
   - flake8 graphanno --max-line-length=110

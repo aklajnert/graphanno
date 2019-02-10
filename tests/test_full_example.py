@@ -47,5 +47,20 @@ def test_example_schema():
 def test_example_query():
     """Check behavior of the annotated class."""
     schema = graphene.Schema(query=ExampleSchema)
-    response = schema.execute('{ name }')
-    assert to_dict(response.data) == {'name': 'Full feature'}
+    response = schema.execute(
+        '{ name, amount, amountRound, useful, created, expiration,'
+        ' refreshAt, owner { name }, tags { name } }')
+    assert to_dict(response.data) == {
+        'name': 'Full feature',
+        'amount': 5.3,
+        'amountRound': 5,
+        'useful': True,
+        'created': '2019-02-06T15:00:00',
+        'expiration': '2050-12-31',
+        'refreshAt': '12:30:00',
+        'owner': {'name': 'me'},
+        'tags': [
+            {'name': 'graphene'},
+            {'name': 'type annotations'}
+        ]
+    }
