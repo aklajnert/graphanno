@@ -1,15 +1,22 @@
-import graphene
+"""Test pylint"""
 
 
-class ExampleSchema(graphene.ObjectType):
-    """Graphene object that bases on Example class."""
+class Example:
+    """Example class"""
+
+    def do_something(self):
+        """Example method"""
+
+
+class ExampleSuperclass(Example):
+    """Superclass of the Example."""
     instance = None
 
-    @classmethod
-    def __init_subclass_with_meta__(cls, *args, **kwargs):
-        return super().__init_subclass_with_meta__(
-            *args, default_resolver=cls._default_fields_resolver, **kwargs)
+    def do_something(self):
+        """Example method override"""
+        print('test')
+        return super().do_something()
 
-    @classmethod
-    def _default_fields_resolver(cls, attr_name, *_):
-        return getattr(cls.instance, attr_name)
+    def do_something_else(self, attr):
+        """Another example method"""
+        return getattr(self.instance, attr)
