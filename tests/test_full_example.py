@@ -17,7 +17,8 @@ class ExampleSchema(graphene.ObjectType):
 
     @classmethod
     def __init_subclass_with_meta__(cls, *args, **kwargs):
-        super().__init_subclass_with_meta__(*args, default_resolver=cls._default_fields_resolver, **kwargs)
+        return super().__init_subclass_with_meta__(
+            *args, default_resolver=cls._default_fields_resolver, **kwargs)
 
     @classmethod
     def _default_fields_resolver(cls, attr_name, *_):
