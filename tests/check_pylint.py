@@ -4,19 +4,22 @@
 class Example:
     """Example class"""
 
-    def do_something(self):
+    @classmethod
+    def do_something(cls, data):
         """Example method"""
+        print(data)
 
 
 class ExampleSuperclass(Example):
     """Superclass of the Example."""
     instance = None
 
-    def do_something(self):
+    @classmethod
+    def do_something(cls, _):
         """Example method override"""
-        print('test')
-        return super().do_something()
+        return super().do_something('test')
 
-    def do_something_else(self, attr):
+    @classmethod
+    def do_something_else(cls, attr):
         """Another example method"""
-        return getattr(self.instance, attr)
+        return getattr(cls.instance, attr)
