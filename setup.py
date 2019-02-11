@@ -12,7 +12,7 @@ with open(path.join(here, 'README.md'), encoding='utf-8') as f:
 
 setup(
     name='graphanno',
-    version='1.0b1',
+    version='1.0.0',
     description='Create graphene ObjectType based on the type annotations.',
     long_description=long_description,
     long_description_content_type='text/markdown',
@@ -33,8 +33,10 @@ setup(
         # Pick your license as you wish
         'License :: OSI Approved :: MIT License',
 
+        'Programming Language :: Python :: 3 :: Only',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
     ],
 
     keywords='graphene graphql type_annotations annotations',

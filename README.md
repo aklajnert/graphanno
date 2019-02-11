@@ -1,6 +1,8 @@
 # graphanno
 
-Use Python 3.6+ type annotations to generate the graphene `ObjectType` classes.
+Use Python 3.6+ type annotations to generate the graphene `ObjectType` classes.  
+
+[![Build Status](https://travis-ci.com/aklajnert/graphanno.svg?branch=master)](https://travis-ci.com/aklajnert/graphanno)
 
 ## Installation
 
