@@ -3,6 +3,7 @@
 Use Python 3.6+ type annotations to generate the graphene `ObjectType` classes.  
 
 [![Build Status](https://travis-ci.com/aklajnert/graphanno.svg?branch=master)](https://travis-ci.com/aklajnert/graphanno)
+[![PyPI version](https://badge.fury.io/py/graphanno.svg)](https://badge.fury.io/py/graphanno)
 
 ## Installation
 
@@ -15,9 +16,6 @@ Installation from source:
 ```bash
 python setup.py install
 ```
-
-This module is very simple, you can just copy the [graphanno.py](./graphanno/graphanno.py) file 
-into your project (make sure it is visible in your `PYTHONPATH`).
 
 ## Usage
 
