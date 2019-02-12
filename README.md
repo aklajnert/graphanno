@@ -30,10 +30,10 @@ subclass.
 
 ```python
 import graphene
-from graphanno import graph_annotations
+import graphanno
 
 # the class below...
-@graph_annotations
+@graphanno.graph_annotations
 class Graphanno:
     value: str
     
@@ -47,13 +47,13 @@ class within the decorated one:
 
 ```python
 import graphene
-from graphanno import graph_annotations
+import graphanno
 
 class Annotated: # this class will be still available later
     value: str
     
 # the class below...
-@graph_annotations
+@graphanno.graph_annotations
 class Graphanno: 
     """
     This class can inherit from graphene.Object type already, 
