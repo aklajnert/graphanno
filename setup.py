@@ -8,11 +8,11 @@ here = path.abspath(path.dirname(__file__))
 
 # Get the long description from the README file
 with open(path.join(here, 'README.md'), encoding='utf-8') as f:
-    long_description = f.read()
+    long_description = "".join([line for line in f.readlines() if '.svg' not in line])
 
 setup(
     name='graphanno',
-    version='1.0.0',
+    version='1.1.0',
     description='Create graphene ObjectType based on the type annotations.',
     long_description=long_description,
     long_description_content_type='text/markdown',
