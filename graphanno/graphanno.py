@@ -34,7 +34,9 @@ def graph_annotations(cls):
     annotations = dict(**getattr(target_class, '__annotations__', {}))
     annotations.update(getattr(cls, '__annotations__', {}))
 
-    for key in excluded_keys:
+    private_keys = tuple(key for key in annotations.keys() if key.startswith('_'))
+
+    for key in excluded_keys + private_keys:
         annotations.pop(key)
 
     if not annotations:
