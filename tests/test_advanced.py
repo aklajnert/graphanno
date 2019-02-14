@@ -2,13 +2,13 @@
 
 import graphene
 
-from graphanno import graph_annotations
+import graphanno
 from .test_objects.advanced import Advanced
 from .utils import to_dict
 
 
-@graph_annotations
-class AdvancedSchema:
+@graphanno.graph_annotations
+class AdvancedSchema(graphanno.ObjectType):
     """Wrapper for Advanced class."""
     __model__ = Advanced
 

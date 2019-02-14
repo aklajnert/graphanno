@@ -1,4 +1,5 @@
 """Main module."""
+import typing
 from datetime import date, datetime, time
 
 import graphene
@@ -22,6 +23,17 @@ class UnsupportedAnnotationError(Exception):
 
 class NoAnnotationsError(Exception):
     """Raised when no annotations have been found (or all are excluded)."""
+
+
+class ObjectType(graphene.ObjectType):
+    """
+    Base class for type annotated graphene schemas.
+    The subclass still has to be decorated, the purpose of this class is to provide hints
+    for special graphanno attributes and those inherited from ObjectType.
+    """
+    __model__: typing.Any = None
+    __excluded_fields__: typing.Iterable = tuple()
+    __ignore_unsupported__: bool = False
 
 
 def graph_annotations(cls):

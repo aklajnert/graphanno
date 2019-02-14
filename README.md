@@ -19,22 +19,25 @@ python setup.py install
 
 ## Usage
 
-The `@graph_annotations` decorator works only with classes that contains type 
+The `@graphanno.graph_annotations` decorator works only with classes that contains type 
 annotations. If there are no type annotations within the decorator target, 
 `NoAnnotationsError` exception is raised. Arguments without annotations will
 be ignored.
 
 To create the `graphene.ObjectType` object, you can just decorate your class with 
-`@graph_annotations`. This will replace your decorated class with the `ObjectType` 
-subclass.
+`@graphanno.graph_annotations`. 
+
+It is recommended to subclass `graphanno.ObjectType` to provide hints for IDE's. 
+This is not mandatory, the `@graphanno.graph_annotations` will replace your decorated class 
+with the `ObjectType` subclass anyway.
 
 ```python
 import graphene
-from graphanno import graph_annotations
+import graphanno
 
 # the class below...
-@graph_annotations
-class Graphanno:
+@graphanno.graph_annotations
+class Graphanno(graphanno.ObjectType):
     value: str
     
 # ... is equivalent to:
@@ -47,16 +50,16 @@ class within the decorated one:
 
 ```python
 import graphene
-from graphanno import graph_annotations
+import graphanno
 
 class Annotated: # this class will be still available later
     value: str
     
 # the class below...
-@graph_annotations
-class Graphanno: 
+@graphanno.graph_annotations
+class Graphanno(graphanno.ObjectType): 
     """
-    This class can inherit from graphene.Object type already, 
+    This class can inherit from graphene.ObjectType already, 
     but it won't change the @graph_annotations behavior.
     """
     __model__ = Annotated
