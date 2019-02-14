@@ -69,7 +69,7 @@ class Graphene(graphene.ObjectType):
 ### Additional parameters
 
 - `__excluded_fields__` (tuple): names of the fields that will be excluded from
-schema.
+schema. Private attributes are always excluded.
 - `__ignore_unsupported__` (bool): do not raise an exception for unsupported annotations. 
 Default `False`.
 
