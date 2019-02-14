@@ -19,7 +19,7 @@ python setup.py install
 
 ## Usage
 
-The `@ggraphanno.raph_annotations` decorator works only with classes that contains type 
+The `@graphanno.graph_annotations` decorator works only with classes that contains type 
 annotations. If there are no type annotations within the decorator target, 
 `NoAnnotationsError` exception is raised. Arguments without annotations will
 be ignored.
@@ -59,7 +59,7 @@ class Annotated: # this class will be still available later
 @graphanno.graph_annotations
 class Graphanno(graphanno.ObjectType): 
     """
-    This class can inherit from graphene.Object type already, 
+    This class can inherit from graphene.ObjectType already, 
     but it won't change the @graph_annotations behavior.
     """
     __model__ = Annotated
