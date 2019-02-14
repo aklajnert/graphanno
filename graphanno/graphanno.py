@@ -1,4 +1,5 @@
 """Main module."""
+import typing
 from datetime import date, datetime, time
 
 import graphene
@@ -30,9 +31,9 @@ class ObjectType(graphene.ObjectType):
     The subclass still has to be decorated, the purpose of this class is to provide hints
     for special graphanno attributes and those inherited from ObjectType.
     """
-    __model__ = None
-    __excluded_fields__ = tuple()
-    __ignore_unsupported__ = False
+    __model__: typing.Any = None
+    __excluded_fields__: typing.Iterable = tuple()
+    __ignore_unsupported__: bool = False
 
 
 def graph_annotations(cls):
