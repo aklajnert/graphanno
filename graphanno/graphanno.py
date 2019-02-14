@@ -1,4 +1,5 @@
 """Main module."""
+import inspect
 import typing
 from datetime import date, datetime, time
 
@@ -45,6 +46,7 @@ def graph_annotations(cls):
 
     annotations = dict(**getattr(target_class, '__annotations__', {}))
     annotations.update(getattr(cls, '__annotations__', {}))
+    annotations.update(_get_property_annotations(target_class))
 
     private_keys = tuple(key for key in annotations.keys() if key.startswith('_'))
 
@@ -76,3 +78,15 @@ def _get_type_from_annotation(annotation, type_only=False):
 
     type_ = graph_annotations(annotation)
     return type_ if type_only else (graphene.Field, (type_,))
+
+
+def _get_property_annotations(cls):
+    property_annotations = {}
+    properties = inspect.getmembers(cls, lambda o: isinstance(o, property))
+    for name, property_ in properties:
+        members = {key: value for key, value in
+                   inspect.getmembers(property_.fget, lambda o: isinstance(o, dict))}
+        annotation = members.get('__annotations__', {}).get('return')
+        if annotation:
+            property_annotations[name] = annotation
+    return property_annotations
