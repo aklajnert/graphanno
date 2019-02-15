@@ -32,6 +32,11 @@ class Example:
     tags: typing.List[Tag]
     redundant: str
 
+    @property
+    def double_amount(self) -> float:
+        """Dynamic property."""
+        return self.amount * 2
+
     @classmethod
     def create_instance(cls) -> 'Example':
         """Return object instance with some data."""

@@ -21,7 +21,7 @@ class Query(graphene.ObjectType):
     def resolve_advanced(*_):
         """Return the advanced object instance"""
         # pylint: disable=attribute-defined-outside-init
-        data = AdvancedSchema()
+        data = Advanced()
         data.array = ['first', 'second', 'third']
         return data
 
@@ -30,12 +30,14 @@ def test_advanced():
     """Test advanced class behavior."""
     # pylint: disable=no-member
     assert isinstance(AdvancedSchema.array, graphene.List)
+    assert isinstance(AdvancedSchema.dynamic_value, graphene.Int)
     assert issubclass(AdvancedSchema, graphene.ObjectType)
     assert not hasattr(AdvancedSchema, '_private')
+    assert not hasattr(AdvancedSchema, 'not_annotated_property')
 
 
 def test_query():
     """Test real query with generated object."""
     schema = graphene.Schema(query=Query)
-    response = schema.execute('{ advanced {array} }')
-    assert to_dict(response.data) == {'advanced': {'array': ['first', 'second', 'third']}}
+    response = schema.execute('{ advanced {array, dynamicValue} }')
+    assert to_dict(response.data) == {'advanced': {'array': ['first', 'second', 'third'], 'dynamicValue': 5}}
