@@ -12,12 +12,27 @@ class Duplicated:
     """Wrapper for the Duplicate class. The name is purposely the same as the name of the model,
     this will cause the name clash"""
     __model__ = duplicated.Duplicated
+    __excluded_fields__ = ('to_exclude',)
 
 
 @graphanno.graph_annotations
 class DuplicateUser:
     """Wrapper for DuplicateUser."""
     __model__ = duplicated.DuplicateUser
+
+
+@graphanno.graph_annotations
+class DuplicateUser2:
+    """Second example, the annotations order is now different (parent class is annotated first)."""
+    __model__ = duplicated.DuplicateUser2
+
+
+@graphanno.graph_annotations
+class Duplicated2:
+    """Wrapper for the Duplicate class. The name is purposely the same as the name of the model,
+    this will cause the name clash"""
+    __model__ = duplicated.Duplicated2
+    __excluded_fields__ = ('to_exclude',)
 
 
 class Query(graphene.ObjectType):
@@ -49,6 +64,10 @@ def test_schema():
     assert isinstance(DuplicateUser.name, graphene.String)
     assert isinstance(DuplicateUser.duplicate, graphene.Field)
     assert issubclass(DuplicateUser, graphene.ObjectType)
+
+    assert isinstance(Duplicated.name, graphene.String)
+    assert not hasattr(Duplicated, 'to_exclude')
+    assert issubclass(Duplicated, graphene.ObjectType)
 
 
 def test_query():
