@@ -37,10 +37,15 @@ class ObjectType(graphene.ObjectType):
     __ignore_unsupported__: bool = False
 
 
-def graph_annotations(cls):
+def graph_annotations(cls, cached_objects={}):  # pylint: disable=dangerous-default-value,too-many-locals
     """Prepare GraphQL schema based on the type annotations."""
     attributes = {}
     target_class = cls.__model__ if hasattr(cls, '__model__') else cls
+    cached, plain = cached_objects.get(cls.__name__, (None, None))
+
+    if cached and not plain:
+        return cached
+
     ignore_unsupported = getattr(cls, '__ignore_unsupported__', False)
     excluded_keys = getattr(cls, '__excluded_fields__', tuple())
 
@@ -65,7 +70,10 @@ def graph_annotations(cls):
         attributes[name] = type_(*args)
 
     superclasses = (cls,) if issubclass(cls, graphene.ObjectType) else (cls, graphene.ObjectType)
-    return type(cls.__name__, superclasses, attributes)
+    result = type(cls.__name__, superclasses, attributes)
+    cached_objects[result.__name__] = (result, not hasattr(cls, '__model__'))
+
+    return result
 
 
 def _get_type_from_annotation(annotation, type_only=False):

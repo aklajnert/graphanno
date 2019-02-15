@@ -25,11 +25,12 @@ class Query(graphene.ObjectType):
     user = graphene.Field(DuplicateUser)
     duplicate = graphene.Field(Duplicated)
 
-    def resolve_user(self, *_):
+    @staticmethod
+    def resolve_user(*_):
         """Return the DuplicateUser object instance"""
         # pylint: disable=attribute-defined-outside-init
         data = duplicated.DuplicateUser()
-        data.duplicate = self.resolve_duplicate()
+        data.duplicate = Query.resolve_duplicate()
         data.name = 'duplicated_parent'
         return data
 
@@ -39,6 +40,7 @@ class Query(graphene.ObjectType):
         # pylint: disable=attribute-defined-outside-init
         duplicate = duplicated.Duplicated()
         duplicate.name = 'duplicated_child'
+        return duplicate
 
 
 def test_schema():
@@ -52,10 +54,9 @@ def test_schema():
 def test_query():
     """Test graphene query with the generated object."""
     schema = graphene.Schema(query=Query)
-    response = schema.execute('{data {name, duplicate {name} }}')
+    response = schema.execute('{duplicate {name}, user {name, duplicate {name} }}')
     assert to_dict(response.data) == {
-        'data': {
-            'name': 'duplicated_parent',
-            'duplicate': {'name': 'duplicated_child'}
-        }
+        'duplicate': {'name': 'duplicated_child'},
+        'user': {'name': 'duplicated_parent',
+                 'duplicate': {'name': 'duplicated_child'}}
     }
