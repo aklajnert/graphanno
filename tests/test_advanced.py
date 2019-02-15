@@ -31,9 +31,9 @@ def test_advanced():
     # pylint: disable=no-member
     assert isinstance(AdvancedSchema.array, graphene.List)
     assert isinstance(AdvancedSchema.dynamic_value, graphene.Int)
-    assert isinstance(AdvancedSchema.not_annotated_property, graphene.Int)
     assert issubclass(AdvancedSchema, graphene.ObjectType)
     assert not hasattr(AdvancedSchema, '_private')
+    assert not hasattr(AdvancedSchema, 'not_annotated_property')
 
 
 def test_query():

@@ -42,17 +42,19 @@ def test_example_schema():
     assert isinstance(ExampleSchema.owner.type.name, graphene.String)
     assert isinstance(ExampleSchema.tags, graphene.List)
     assert str(ExampleSchema.tags.of_type) == 'Tag'
+    assert isinstance(ExampleSchema.double_amount, graphene.Float)
 
 
 def test_example_query():
     """Check behavior of the annotated class."""
     schema = graphene.Schema(query=ExampleSchema)
     response = schema.execute(
-        '{ name, amount, amountRound, useful, created, expiration,'
+        '{ name, amount, doubleAmount, amountRound, useful, created, expiration,'
         ' refreshAt, owner { name }, tags { name } }')
     assert to_dict(response.data) == {
         'name': 'Full feature',
         'amount': 5.3,
+        'doubleAmount': 10.6,
         'amountRound': 5,
         'useful': True,
         'created': '2019-02-06T15:00:00',
