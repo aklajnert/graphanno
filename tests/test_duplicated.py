@@ -105,8 +105,9 @@ def test_query():
 
 def test_name_clash():
     """If another class with the same name will be annotated, the exception will be raised."""
+    # pylint: disable=redefined-outer-name,unused-variable
     with pytest.raises(graphanno.SchemaClashError) as excinfo:
-        @graphanno.graph_annotations  # pylint: disable=redefined-outer-name,unused-variable
+        @graphanno.graph_annotations
         class Duplicated:
             """Same name, different class"""
             value: int
