@@ -1,6 +1,7 @@
 """Test duplicate behavior."""
 
 import graphene
+import pytest
 
 import graphanno
 from .test_objects import duplicated
@@ -100,3 +101,14 @@ def test_query():
         'user2': {'name': 'duplicated_parent',
                   'duplicate': {'name': 'duplicated_child'}}
     }
+
+
+def test_name_clash():
+    """If another class with the same name will be annotated, the exception will be raised."""
+    with pytest.raises(graphanno.SchemaClashError) as excinfo:
+        @graphanno.graph_annotations  # pylint: disable=redefined-outer-name,unused-variable
+        class Duplicated:
+            """Same name, different class"""
+            value: int
+
+    assert excinfo.value.args[0] == 'The schema with name "Duplicated" already exists.'

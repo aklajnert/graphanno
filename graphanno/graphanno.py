@@ -26,6 +26,10 @@ class NoAnnotationsError(Exception):
     """Raised when no annotations have been found (or all are excluded)."""
 
 
+class SchemaClashError(Exception):
+    """Raised when there are two different schema classes with the same name."""
+
+
 class ObjectType(graphene.ObjectType):
     """
     Base class for type annotated graphene schemas.
@@ -45,7 +49,7 @@ def graph_annotations(cls, cached_objects={}):  # pylint: disable=dangerous-defa
     ignore_unsupported = getattr(cls, '__ignore_unsupported__', False)
     excluded_keys = getattr(cls, '__excluded_fields__', tuple())
 
-    cached = _get_cached(cached_objects, cls, excluded_keys)
+    cached = _get_cached(cached_objects, target_class, excluded_keys)
     if cached:
         return cached
 
@@ -61,7 +65,9 @@ def graph_annotations(cls, cached_objects={}):  # pylint: disable=dangerous-defa
 
     superclasses = (cls,) if issubclass(cls, graphene.ObjectType) else (cls, graphene.ObjectType)
     result = type(cls.__name__, superclasses, attributes)
-    cached_objects[result.__name__] = (result, hasattr(cls, '__model__') or set(annotations.keys()))
+    cached_objects[result.__name__] = (result,
+                                       target_class,
+                                       hasattr(cls, '__model__') or set(annotations.keys()))
 
     return result
 
@@ -78,16 +84,18 @@ def _get_annotations_data(cls, excluded_keys, target_class):
     return annotations
 
 
-def _get_cached(cached_objects, cls, excluded_keys):
-    cached, annotated = cached_objects.get(cls.__name__, (None, None))
+def _get_cached(cached_objects, target, excluded_keys):
+    cached, original, annotated = cached_objects.get(target.__name__, (None, None, None))
     if cached:
+        if (target.__module__, target) != (original.__module__, original):
+            raise SchemaClashError(f'The schema with name "{target.__name__}" already exists.')
         if annotated is True:
             return cached
         for key in excluded_keys:
             delattr(cached, key)
             annotated.remove(key)
         if not annotated:
-            raise NoAnnotationsError(f'No included annotations for class {cls.__name__}.')
+            raise NoAnnotationsError(f'No included annotations for class {target.__name__}.')
     return cached
 
 
