@@ -39,6 +39,7 @@ class Query(graphene.ObjectType):
     """Test GraphQL query."""
     user = graphene.Field(DuplicateUser)
     duplicate = graphene.Field(Duplicated)
+    user2 = graphene.Field(DuplicateUser2)
 
     @staticmethod
     def resolve_user(*_):
@@ -57,6 +58,15 @@ class Query(graphene.ObjectType):
         duplicate.name = 'duplicated_child'
         return duplicate
 
+    @staticmethod
+    def resolve_user2(*_):
+        """Return the DuplicateUser2 object instance"""
+        # pylint: disable=attribute-defined-outside-init
+        data = duplicated.DuplicateUser2()
+        data.duplicate = Query.resolve_duplicate()
+        data.name = 'duplicated_parent'
+        return data
+
 
 def test_schema():
     """Test DuplicatedUser content."""
@@ -69,13 +79,24 @@ def test_schema():
     assert not hasattr(Duplicated, 'to_exclude')
     assert issubclass(Duplicated, graphene.ObjectType)
 
+    assert isinstance(DuplicateUser2.name, graphene.String)
+    assert isinstance(DuplicateUser2.duplicate, graphene.Field)
+    assert issubclass(DuplicateUser2, graphene.ObjectType)
+
+    assert isinstance(Duplicated2.name, graphene.String)
+    assert not hasattr(Duplicated2, 'to_exclude')
+    assert issubclass(Duplicated2, graphene.ObjectType)
+
 
 def test_query():
     """Test graphene query with the generated object."""
     schema = graphene.Schema(query=Query)
-    response = schema.execute('{duplicate {name}, user {name, duplicate {name} }}')
+    response = schema.execute('{duplicate {name}, user {name, duplicate {name} }, '
+                              'user2 {name, duplicate {name} }}')
     assert to_dict(response.data) == {
         'duplicate': {'name': 'duplicated_child'},
         'user': {'name': 'duplicated_parent',
-                 'duplicate': {'name': 'duplicated_child'}}
+                 'duplicate': {'name': 'duplicated_child'}},
+        'user2': {'name': 'duplicated_parent',
+                  'duplicate': {'name': 'duplicated_child'}}
     }
