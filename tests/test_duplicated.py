@@ -116,3 +116,16 @@ def test_name_clash():
                                     'and bases on another class:\n' \
                                     '	- Current: tests.test_duplicated.Duplicated\n' \
                                     '	- Existing: tests.test_objects.duplicated.Duplicated'
+
+
+def test_all_annotations_excluded():
+    """All annotations will be removed from a duplicated object."""
+    # pylint: disable=redefined-outer-name,unused-variable
+    with pytest.raises(graphanno.NoAnnotationsError) as excinfo:
+        @graphanno.graph_annotations
+        class _:
+            """Exclude all fields"""
+            __model__ = duplicated.Duplicated
+            __excluded_fields__ = ('to_exclude', 'name')
+
+    assert excinfo.value.args[0] == 'No included annotations for class _.'
