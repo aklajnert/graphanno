@@ -88,7 +88,10 @@ def _get_cached(cached_objects, target, excluded_keys):
     cached, original, annotated = cached_objects.get(target.__name__, (None, None, None))
     if cached:
         if (target.__module__, target) != (original.__module__, original):
-            raise SchemaClashError(f'The schema with name "{target.__name__}" already exists.')
+            raise SchemaClashError(f'The schema with name "{target.__name__}" already exists, '
+                                   f'and bases on another class:\n'
+                                   f'\t- Current: {target.__module__}.{target.__name__}\n'
+                                   f'\t- Existing: {original.__module__}.{original.__name__}')
         if annotated is True:
             return cached
         for key in excluded_keys:

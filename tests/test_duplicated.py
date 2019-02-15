@@ -111,4 +111,7 @@ def test_name_clash():
             """Same name, different class"""
             value: int
 
-    assert excinfo.value.args[0] == 'The schema with name "Duplicated" already exists.'
+    assert excinfo.value.args[0] == 'The schema with name "Duplicated" already exists, ' \
+                                    'and bases on another class:\n' \
+                                    '	- Current: tests.test_duplicated.Duplicated\n' \
+                                    '	- Existing: tests.test_objects.duplicated.Duplicated'

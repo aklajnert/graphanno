@@ -69,6 +69,9 @@ class Graphene(graphene.ObjectType):
     value = graphene.String()
 ```
 
+If another class with the same name will be decorated, the `SchemaClashError` exception
+will be raised.
+
 ### Additional parameters
 
 - `__excluded_fields__` (tuple): names of the fields that will be excluded from
