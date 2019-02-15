@@ -26,6 +26,10 @@ class NoAnnotationsError(Exception):
     """Raised when no annotations have been found (or all are excluded)."""
 
 
+class SchemaClashError(Exception):
+    """Raised when there are two different schema classes with the same name."""
+
+
 class ObjectType(graphene.ObjectType):
     """
     Base class for type annotated graphene schemas.
@@ -37,24 +41,19 @@ class ObjectType(graphene.ObjectType):
     __ignore_unsupported__: bool = False
 
 
-def graph_annotations(cls):
+def graph_annotations(cls, cached_objects={}):  # pylint: disable=dangerous-default-value
     """Prepare GraphQL schema based on the type annotations."""
     attributes = {}
     target_class = cls.__model__ if hasattr(cls, '__model__') else cls
+
     ignore_unsupported = getattr(cls, '__ignore_unsupported__', False)
     excluded_keys = getattr(cls, '__excluded_fields__', tuple())
 
-    annotations = dict(**getattr(target_class, '__annotations__', {}))
-    annotations.update(getattr(cls, '__annotations__', {}))
-    annotations.update(_get_property_annotations(target_class))
+    cached = _get_cached(cached_objects, target_class, excluded_keys)
+    if cached:
+        return cached
 
-    private_keys = tuple(key for key in annotations.keys() if key.startswith('_'))
-
-    for key in excluded_keys + private_keys:
-        annotations.pop(key)
-
-    if not annotations:
-        raise NoAnnotationsError(f'No included annotations for class {cls.__name__}.')
+    annotations = _get_annotations_data(cls, excluded_keys, target_class)
 
     for name, annotation in annotations.items():
         if annotation in UNSUPORTED_TYPES:
@@ -65,7 +64,42 @@ def graph_annotations(cls):
         attributes[name] = type_(*args)
 
     superclasses = (cls,) if issubclass(cls, graphene.ObjectType) else (cls, graphene.ObjectType)
-    return type(cls.__name__, superclasses, attributes)
+    result = type(cls.__name__, superclasses, attributes)
+    cached_objects[result.__name__] = (result,
+                                       target_class,
+                                       hasattr(cls, '__model__') or set(annotations.keys()))
+
+    return result
+
+
+def _get_annotations_data(cls, excluded_keys, target_class):
+    annotations = dict(**getattr(target_class, '__annotations__', {}))
+    annotations.update(getattr(cls, '__annotations__', {}))
+    annotations.update(_get_property_annotations(target_class))
+    private_keys = tuple(key for key in annotations.keys() if key.startswith('_'))
+    for key in excluded_keys + private_keys:
+        annotations.pop(key)
+    if not annotations:
+        raise NoAnnotationsError(f'No included annotations for class {cls.__name__}.')
+    return annotations
+
+
+def _get_cached(cached_objects, target, excluded_keys):
+    cached, original, annotated = cached_objects.get(target.__name__, (None, None, None))
+    if cached:
+        if (target.__module__, target) != (original.__module__, original):
+            raise SchemaClashError(f'The schema with name "{target.__name__}" already exists, '
+                                   f'and bases on another class:\n'
+                                   f'\t- Current: {target.__module__}.{target.__name__}\n'
+                                   f'\t- Existing: {original.__module__}.{original.__name__}')
+        if annotated is True:
+            return cached
+        for key in excluded_keys:
+            delattr(cached, key)
+            annotated.remove(key)
+        if not annotated:
+            raise NoAnnotationsError(f'No included annotations for class {target.__name__}.')
+    return cached
 
 
 def _get_type_from_annotation(annotation, type_only=False):
