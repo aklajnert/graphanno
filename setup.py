@@ -12,7 +12,7 @@ with open(path.join(here, 'README.md'), encoding='utf-8') as f:
 
 setup(
     name='graphanno',
-    version='1.1.0',
+    version='1.2.0',
     description='Create graphene ObjectType based on the type annotations.',
     long_description=long_description,
     long_description_content_type='text/markdown',
