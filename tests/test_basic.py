@@ -10,12 +10,14 @@ from .utils import to_dict
 @graph_annotations
 class BasicSchema:
     """Wrapper for the Basic class."""
+
     __model__ = Basic
 
 
 @graph_annotations
 class ExtendedBasicSchema:
     """Basic class with few additional fields."""
+
     __model__ = Basic
 
     extra: bool
@@ -24,6 +26,7 @@ class ExtendedBasicSchema:
 
 class Query(graphene.ObjectType):
     """Test GraphQL query."""
+
     basic = graphene.Field(ExtendedBasicSchema)
 
     @staticmethod
@@ -34,7 +37,7 @@ class Query(graphene.ObjectType):
         data.extra = False
         data.boolean = 5
         data.number = 10
-        data.string = 'some string'
+        data.string = "some string"
         return data
 
 
@@ -60,13 +63,7 @@ def test_extended_basic():
 def test_query():
     """Test graphene query with the generated object."""
     schema = graphene.Schema(query=Query)
-    response = schema.execute('{basic {extra, boolean, number, string} }')
+    response = schema.execute("{basic {extra, boolean, number, string} }")
     assert to_dict(response.data) == {
-        'basic':
-            {
-                'extra': False,
-                'boolean': 5,
-                'number': 10,
-                'string': 'some string'
-            }
+        "basic": {"extra": False, "boolean": 5, "number": 10, "string": "some string"}
     }

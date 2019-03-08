@@ -12,19 +12,22 @@ from .utils import to_dict
 class Duplicated:
     """Wrapper for the Duplicate class. The name is purposely the same as the name of the model,
     this will cause the name clash"""
+
     __model__ = duplicated.Duplicated
-    __excluded_fields__ = ('to_exclude',)
+    __excluded_fields__ = ("to_exclude",)
 
 
 @graphanno.graph_annotations
 class DuplicateUser:
     """Wrapper for DuplicateUser."""
+
     __model__ = duplicated.DuplicateUser
 
 
 @graphanno.graph_annotations
 class DuplicateUser2:
     """Second example, the annotations order is now different (parent class is annotated first)."""
+
     __model__ = duplicated.DuplicateUser2
 
 
@@ -32,12 +35,14 @@ class DuplicateUser2:
 class Duplicated2:
     """Wrapper for the Duplicate class. The name is purposely the same as the name of the model,
     this will cause the name clash"""
+
     __model__ = duplicated.Duplicated2
-    __excluded_fields__ = ('to_exclude',)
+    __excluded_fields__ = ("to_exclude",)
 
 
 class Query(graphene.ObjectType):
     """Test GraphQL query."""
+
     user = graphene.Field(DuplicateUser)
     duplicate = graphene.Field(Duplicated)
     user2 = graphene.Field(DuplicateUser2)
@@ -48,7 +53,7 @@ class Query(graphene.ObjectType):
         # pylint: disable=attribute-defined-outside-init
         data = duplicated.DuplicateUser()
         data.duplicate = Query.resolve_duplicate()
-        data.name = 'duplicated_parent'
+        data.name = "duplicated_parent"
         return data
 
     @staticmethod
@@ -56,7 +61,7 @@ class Query(graphene.ObjectType):
         """Return the Duplicated object instance"""
         # pylint: disable=attribute-defined-outside-init
         duplicate = duplicated.Duplicated()
-        duplicate.name = 'duplicated_child'
+        duplicate.name = "duplicated_child"
         return duplicate
 
     @staticmethod
@@ -65,7 +70,7 @@ class Query(graphene.ObjectType):
         # pylint: disable=attribute-defined-outside-init
         data = duplicated.DuplicateUser2()
         data.duplicate = Query.resolve_duplicate()
-        data.name = 'duplicated_parent'
+        data.name = "duplicated_parent"
         return data
 
 
@@ -77,7 +82,7 @@ def test_schema():
     assert issubclass(DuplicateUser, graphene.ObjectType)
 
     assert isinstance(Duplicated.name, graphene.String)
-    assert not hasattr(Duplicated, 'to_exclude')
+    assert not hasattr(Duplicated, "to_exclude")
     assert issubclass(Duplicated, graphene.ObjectType)
 
     assert isinstance(DuplicateUser2.name, graphene.String)
@@ -85,21 +90,27 @@ def test_schema():
     assert issubclass(DuplicateUser2, graphene.ObjectType)
 
     assert isinstance(Duplicated2.name, graphene.String)
-    assert not hasattr(Duplicated2, 'to_exclude')
+    assert not hasattr(Duplicated2, "to_exclude")
     assert issubclass(Duplicated2, graphene.ObjectType)
 
 
 def test_query():
     """Test graphene query with the generated object."""
     schema = graphene.Schema(query=Query)
-    response = schema.execute('{duplicate {name}, user {name, duplicate {name} }, '
-                              'user2 {name, duplicate {name} }}')
+    response = schema.execute(
+        "{duplicate {name}, user {name, duplicate {name} }, "
+        "user2 {name, duplicate {name} }}"
+    )
     assert to_dict(response.data) == {
-        'duplicate': {'name': 'duplicated_child'},
-        'user': {'name': 'duplicated_parent',
-                 'duplicate': {'name': 'duplicated_child'}},
-        'user2': {'name': 'duplicated_parent',
-                  'duplicate': {'name': 'duplicated_child'}}
+        "duplicate": {"name": "duplicated_child"},
+        "user": {
+            "name": "duplicated_parent",
+            "duplicate": {"name": "duplicated_child"},
+        },
+        "user2": {
+            "name": "duplicated_parent",
+            "duplicate": {"name": "duplicated_child"},
+        },
     }
 
 
@@ -107,25 +118,31 @@ def test_name_clash():
     """If another class with the same name will be annotated, the exception will be raised."""
     # pylint: disable=redefined-outer-name,unused-variable
     with pytest.raises(graphanno.SchemaClashError) as excinfo:
+
         @graphanno.graph_annotations
         class Duplicated:
             """Same name, different class"""
+
             value: int
 
-    assert excinfo.value.args[0] == 'The schema with name "Duplicated" already exists, ' \
-                                    'and bases on another class:\n' \
-                                    '	- Current: tests.test_duplicated.Duplicated\n' \
-                                    '	- Existing: tests.test_objects.duplicated.Duplicated'
+    assert (
+        excinfo.value.args[0] == 'The schema with name "Duplicated" already exists, '
+        "and bases on another class:\n"
+        "	- Current: tests.test_duplicated.Duplicated\n"
+        "	- Existing: tests.test_objects.duplicated.Duplicated"
+    )
 
 
 def test_all_annotations_excluded():
     """All annotations will be removed from a duplicated object."""
     # pylint: disable=redefined-outer-name,unused-variable
     with pytest.raises(graphanno.NoAnnotationsError) as excinfo:
+
         @graphanno.graph_annotations
         class _:
             """Exclude all fields"""
-            __model__ = duplicated.Duplicated
-            __excluded_fields__ = ('to_exclude', 'name')
 
-    assert excinfo.value.args[0] == 'No included annotations for class _.'
+            __model__ = duplicated.Duplicated
+            __excluded_fields__ = ("to_exclude", "name")
+
+    assert excinfo.value.args[0] == "No included annotations for class _."

@@ -1,10 +1,12 @@
 """Advanced class definition."""
-from typing import List
+from typing import List, Optional
 
 
 class Advanced:
     """Class with advanced data types."""
+
     array: List[str]
+    optional: Optional[str]
     _private: bool
 
     @property
