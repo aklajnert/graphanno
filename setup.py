@@ -12,7 +12,7 @@ with open(path.join(here, 'README.md'), encoding='utf-8') as f:
 
 setup(
     name='graphanno',
-    version='1.3.0',
+    version='1.3.1',
     description='Create graphene ObjectType based on the type annotations.',
     long_description=long_description,
     long_description_content_type='text/markdown',
@@ -42,7 +42,7 @@ setup(
     keywords='graphene graphql type_annotations annotations',
     packages=find_packages(exclude=['contrib', 'docs', 'tests']),
     python_requires='>=3.6, <4',
-    install_requires=['graphene>=2.0'],
+    install_requires=['graphene<3,>=2.0'],
     extras_require={'test': ['pytest', 'pylint', 'flake8'], },
     project_urls={
         'Bug Reports': 'https://github.com/aklajnert/graphanno/issues',
