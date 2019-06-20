@@ -42,8 +42,8 @@ class ObjectType(graphene.ObjectType):
     __ignore_unsupported__: bool = False
 
 
-def graph_annotations(
-    cls, cached_objects={}  # pylint: disable=dangerous-default-value
+def graph_annotations(  # pylint: disable=dangerous-default-value
+    cls, cached_objects={}
 ):
     """Prepare GraphQL schema based on the type annotations."""
     attributes = {}
