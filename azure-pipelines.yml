@@ -10,8 +10,6 @@ pool:
   vmImage: 'ubuntu-latest'
 strategy:
   matrix:
-    Python35:
-      python.version: '3.5'
     Python36:
       python.version: '3.6'
     Python37:
@@ -31,3 +29,13 @@ steps:
 - script: |
     pytest
   displayName: 'pytest'
+
+- script: |
+    pylint graphanno
+    pylint tests
+  displayName: 'pylint'
+
+- script: |
+    flake8 graphanno --max-line-length=110
+    flake8 tests --max-line-length=110
+  displayName: 'flake8'
