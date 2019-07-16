@@ -9,7 +9,7 @@ script:
   - pytest
   - pylint graphanno
   - pylint tests
-  - flake8 graphanno --max-line-length=110
-  - flake8 tests --max-line-length=110
+  - flake8 graphanno --max-line-length=88
+  - flake8 tests --max-line-length=88
 install:
   - pip install .[test]

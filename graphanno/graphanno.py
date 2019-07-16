@@ -33,8 +33,8 @@ class SchemaClashError(Exception):
 class ObjectType(graphene.ObjectType):
     """
     Base class for type annotated graphene schemas.
-    The subclass still has to be decorated, the purpose of this class is to provide hints
-    for special graphanno attributes and those inherited from ObjectType.
+    The subclass still has to be decorated, the purpose of this class is to provide
+    hints for special graphanno attributes and those inherited from ObjectType.
     """
 
     __model__: typing.Any = None
@@ -96,7 +96,8 @@ def _get_annotations_data(cls, excluded_keys, target_class):
         annotations.pop(key)
     if not annotations:
         raise NoAnnotationsError(
-            f'No included annotations for class {cls.__name__ if hasattr(cls, "__name__") else cls}.'
+            f'No included annotations for class '
+            f'{cls.__name__ if hasattr(cls, "__name__") else cls}.'
         )
     return annotations
 

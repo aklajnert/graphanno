@@ -10,8 +10,10 @@ from .utils import to_dict
 
 @graphanno.graph_annotations
 class Duplicated:
-    """Wrapper for the Duplicate class. The name is purposely the same as the name of the model,
-    this will cause the name clash"""
+    """
+    Wrapper for the Duplicate class. The name is purposely the same
+    as the name of the model, this will cause the name clash
+    """
 
     __model__ = duplicated.Duplicated
     __excluded_fields__ = ("to_exclude",)
@@ -26,15 +28,20 @@ class DuplicateUser:
 
 @graphanno.graph_annotations
 class DuplicateUser2:
-    """Second example, the annotations order is now different (parent class is annotated first)."""
+    """
+    Second example, the annotations order is now different
+    (parent class is annotated first).
+    """
 
     __model__ = duplicated.DuplicateUser2
 
 
 @graphanno.graph_annotations
 class Duplicated2:
-    """Wrapper for the Duplicate class. The name is purposely the same as the name of the model,
-    this will cause the name clash"""
+    """
+    Wrapper for the Duplicate class. The name is purposely the same as
+    the name of the model, this will cause the name clash.
+    """
 
     __model__ = duplicated.Duplicated2
     __excluded_fields__ = ("to_exclude",)
@@ -115,7 +122,10 @@ def test_query():
 
 
 def test_name_clash():
-    """If another class with the same name will be annotated, the exception will be raised."""
+    """
+    If another class with the same name will be annotated,
+    the exception will be raised.
+    """
     # pylint: disable=redefined-outer-name,unused-variable
     with pytest.raises(graphanno.SchemaClashError) as excinfo:
 

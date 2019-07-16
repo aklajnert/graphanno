@@ -38,6 +38,6 @@ steps:
   displayName: 'pylint'
 
 - script: |
-    flake8 graphanno --max-line-length=110
-    flake8 tests --max-line-length=110
+    flake8 graphanno --max-line-length=88
+    flake8 tests --max-line-length=88
   displayName: 'flake8'

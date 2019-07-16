@@ -30,7 +30,10 @@ def test_no_annotations_raised():
 
 
 def test_with_annotations_raised():
-    """The decorated class has annotations, but all fields are excluded which will raise exception."""
+    """
+    The decorated class has annotations, but all fields are
+    excluded which will raise exception.
+    """
     with pytest.raises(graphanno.NoAnnotationsError) as excinfo:
 
         @graphanno.graph_annotations
