@@ -28,7 +28,16 @@ steps:
 - task: UsePythonVersion@0
   inputs:
     versionSpec: '$(python.version)'
-  displayName: 'Use Python $(python.version)'
+    architecture: 'x64'
+  condition: not(in(variables['python.version'], '3.8'))
+  displayName: Use cached Python $(python.version) for tests.
+
+- script: |
+    sudo add-apt-repository ppa:deadsnakes
+    sudo apt-get update
+    sudo apt-get install -y --no-install-recommends python$(python.version)-dev python$(python.version)-distutils
+  condition: in(variables['python.version'], '3.8')
+  displayName: Install Python $(python.version) from the deadsnakes PPA for tests.
 
 - script: |
     python -m pip install --upgrade pip
