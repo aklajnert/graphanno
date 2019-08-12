@@ -3,7 +3,7 @@
 Use Python 3.6+ type annotations to generate the graphene `ObjectType` classes.  
 
 [![Build Status](https://travis-ci.com/aklajnert/graphanno.svg?branch=master)](https://travis-ci.com/aklajnert/graphanno)
-[![Build Status](https://dev.azure.com/aklajnert-gh/Graphanno/_apis/build/status/aklajnert.graphanno?branchName=master)](https://dev.azure.com/aklajnert-gh/Graphanno/_build/latest?definitionId=1&branchName=master)
+[![Build Status](https://dev.azure.com/aklajnert/Graphanno/_apis/build/status/aklajnert.graphanno?branchName=master)](https://dev.azure.com/aklajnert/Graphanno/_build/latest?definitionId=1&branchName=master)
 [![PyPI version](https://badge.fury.io/py/graphanno.svg)](https://badge.fury.io/py/graphanno)
 
 ## Installation
