@@ -6,7 +6,7 @@ authors = ["Andrzej Klajnert <github@aklajnert.pl>"]
 license = "MIT"
 
 [tool.poetry.dependencies]
-python = "^3.7"
+python = "^3.6"
 graphene = "<3,>=2.0"
 pylint = "^2.3"
 flake8 = "^3.7"
